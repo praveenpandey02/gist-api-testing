@@ -1,12 +1,15 @@
 import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONObject;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class CreateAGistTests {
     String baseURI = "https://api.github.com";
@@ -16,8 +19,12 @@ public class CreateAGistTests {
     public void setUp() {
         List<String> gistIDs;
 
-        Dotenv dotenv = Dotenv.load();
-        auth_token = dotenv.get("TOKEN_FOR_GIST");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String ci_token = System.getenv("TOKEN_FOR_GIST");
+        if(ci_token == null){
+            auth_token = dotenv.get("TOKEN_FOR_GIST");
+        }
+
         if (auth_token.isEmpty()) {
             throw new RuntimeException("Please set the auth token before running tests");
         }
