@@ -24,6 +24,3 @@ jobs:
         run: mvn clean test -DincludeTags=smoke
         env:
           TOKEN_FOR_GIST: ${{secrets.TOKEN_FOR_GIST}}
-
-      - name: Generate HTML report
-        run: mvn surefire-report:report
