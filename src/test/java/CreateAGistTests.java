@@ -74,7 +74,23 @@ public class CreateAGistTests {
 
     @Test
     @Tag("smoke")
-    public void createAPublicGist() {
+    public void createAPublicGistSuccessfully() {
+        createAPublicGist();
+    }
+
+    @Test
+    public void updateAPublicGist(){
+        createAPublicGist();
+
+    }
+
+    @Test
+    public void deleteAPublicGist(){
+        createAPublicGist();
+
+    }
+
+    public void createAPublicGist(){
         JSONObject body = new JSONObject();
         JSONObject file = new JSONObject();
         JSONObject fileContent = new JSONObject();
@@ -97,10 +113,6 @@ public class CreateAGistTests {
                 .body("description", equalTo("Example of a PUBLIC gist " + uniqueString))
                 .body("public", equalTo(true))
                 .body("files.'README.md'.content", notNullValue());
-    }
-
-    @Test
-    public void updateAPublicGist(){
 
     }
 }
