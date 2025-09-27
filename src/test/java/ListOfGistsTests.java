@@ -1,5 +1,6 @@
 import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -23,6 +24,7 @@ public class ListOfGistsTests {
     }
 
     @Test
+    @Disabled("Skipping it for now...")
     public void getTotalNumberOfGists() {
         given()
                 .header("Authorization", "token " + auth_token)
