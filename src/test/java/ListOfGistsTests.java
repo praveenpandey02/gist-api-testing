@@ -16,11 +16,15 @@ public class ListOfGistsTests {
 
     @BeforeEach
     public void setUp() {
-        Dotenv dotenv = Dotenv.load();
-        auth_token = dotenv.get("TOKEN_FOR_GIST");
-        if (auth_token.isEmpty()) {
-            throw new RuntimeException("Please set the auth token before running tests");
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        String ci_token = System.getenv("TOKEN_FOR_GIST");
+        if(ci_token == null){
+            auth_token = dotenv.get("TOKEN_FOR_GIST");
+            if (auth_token.isEmpty()) {
+                throw new RuntimeException("Please set the auth token before running tests");
+            }
         }
+        else auth_token = ci_token;
     }
 
     @Test
