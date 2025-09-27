@@ -1,10 +1,8 @@
-import io.github.cdimascio.dotenv.Dotenv;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
@@ -12,42 +10,9 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
 public class CreateAGistTests {
-    String baseURI = "https://api.github.com";
-    String auth_token;
-
     @BeforeEach
-    public void setUp() {
-        List<String> gistIDs;
-
-        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-        String ci_token = System.getenv("TOKEN_FOR_GIST");
-        if(ci_token == null){
-            auth_token = dotenv.get("TOKEN_FOR_GIST");
-            if (auth_token.isEmpty()) {
-                throw new RuntimeException("Please set the auth token before running tests");
-            }
-        }
-        else auth_token = ci_token;
-
-        gistIDs = given()
-                .header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
-                .when()
-                .get("/gists")
-                .then()
-                .statusCode(200)
-                .extract().jsonPath().getList("id");
-
-        System.out.println("Gists to delete --> " + gistIDs);
-        for (String gist_id : gistIDs) {
-            given()
-                    .header("Authorization", "token " + auth_token)
-                    .baseUri(baseURI)
-                    .when()
-                    .delete("/gists/" + gist_id)
-                    .then()
-                    .statusCode(204);
-        }
+    public void setUp(){
+        TestSetup.globalSetup();
     }
 
     @Test
@@ -67,8 +32,8 @@ public class CreateAGistTests {
                 }
                 """, uniqueString, uniqueString);
         given()
-                .header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
+                .header("Authorization", "token " + TestSetup.auth_token)
+                .baseUri(TestSetup.BASE_URI)
                 .body(body)
                 .when()
                 .post("/gists")
@@ -109,8 +74,8 @@ public class CreateAGistTests {
         body.put("description", "Example of a PUBLIC gist " + uniqueString);
         body.put("public", true);
 
-        given().header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
+        given().header("Authorization", "token " + TestSetup.auth_token)
+                .baseUri(TestSetup.BASE_URI)
                 .body(body.toString()) //This conversion is important when using JSONObject else the object will not be serialized correctly and it may throw 422
                 .when()
                 .post("/gists")
@@ -122,4 +87,5 @@ public class CreateAGistTests {
                 .body("files.'README.md'.content", notNullValue());
 
     }
+
 }
