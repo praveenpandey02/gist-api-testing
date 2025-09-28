@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  run-smoke-tests:
+  run-tests:
     runs-on: ubuntu-latest
 
     strategy:
