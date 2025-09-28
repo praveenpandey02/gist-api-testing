@@ -1,8 +1,6 @@
-import io.github.cdimascio.dotenv.Dotenv;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
+import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.*;
 
 import java.util.List;
 
@@ -11,37 +9,21 @@ import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInC
 import static org.hamcrest.Matchers.*;
 
 public class ListOfGistsTests {
-    String baseURI = "https://api.github.com";
-    String auth_token;
+    public static RequestSpecification requestSpec;
 
-    @BeforeEach
-    public void setUp() {
-        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-        String ci_token = System.getenv("TOKEN_FOR_GIST");
-        if(ci_token == null){
-            auth_token = dotenv.get("TOKEN_FOR_GIST");
-            if (auth_token.isEmpty()) {
-                throw new RuntimeException("Please set the auth token before running tests");
-            }
-        }
-        else auth_token = ci_token;
-    }
-
-    @Test
-    @Disabled("Skipping it for now...")
-    public void getTotalNumberOfGists() {
-        given()
-                .header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
-                .when().get("/gists")
-                .then().assertThat().body("size()", equalTo(4));
+    @BeforeAll
+    public static void setUpSpec() {
+        TestSetup.globalSetup();
+        requestSpec = new RequestSpecBuilder()
+                .setBaseUri(TestSetup.BASE_URI)
+                .addHeader("Authorization", "token " + TestSetup.auth_token)
+                .build();
     }
 
     @Test
     public void getListForAuthenticatedUser() {
         List<String> gistIDs = given()
-                .header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
+                .spec(requestSpec)
                 .when()
                 .get("/gists")
                 .then()
@@ -56,7 +38,7 @@ public class ListOfGistsTests {
     @Tag("smoke")
     public void getErrorForUnauthenticatedUsers() {
         given().header("Authorization", "token " + "some_invalid_token")
-                .baseUri(baseURI)
+                .baseUri(TestSetup.BASE_URI)
                 .when()
                 .get("/gists")
                 .then()
@@ -67,8 +49,7 @@ public class ListOfGistsTests {
     @Test
     public void checkResponseSchemaJson() {
         given()
-                .header("Authorization", "token " + auth_token)
-                .baseUri(baseURI)
+                .spec(requestSpec)
                 .when()
                 .get("/gists")
                 .then()
