@@ -19,6 +19,6 @@ jobs:
           distribution: 'temurin'
 
       - name: Run Smoke Tests 🚀
-        run: mvn clean test -DincludeTags=smoke
+        run: mvn clean test -Dgroups=smoke
         env:
           TOKEN_FOR_GIST: ${{secrets.TOKEN_FOR_GIST}}
