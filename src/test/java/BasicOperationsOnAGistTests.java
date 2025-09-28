@@ -2,6 +2,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
@@ -52,8 +53,8 @@ public class BasicOperationsOnAGistTests {
 
     }
 
+    //@RepeatedTest(35)
     @Test
-    @Tag("smoke")
     public void createAPublicGistSuccessfully() {
         createAGist();
     }
@@ -128,7 +129,6 @@ public class BasicOperationsOnAGistTests {
     }
 
     @Test
-    @Tag("smoke")
     public void deleteAGist() {
         String gist_id = createAGist();
         given()

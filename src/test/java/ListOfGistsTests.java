@@ -36,7 +36,6 @@ public class ListOfGistsTests {
     }
 
     @Test
-    @Tag("smoke")
     public void getErrorForUnauthenticatedUsers() {
         given().header("Authorization", "token " + "some_invalid_token")
                 .baseUri(TestSetup.BASE_URI)
@@ -48,6 +47,7 @@ public class ListOfGistsTests {
     }
 
     @Test
+    @Tag("regression")
     public void checkResponseSchemaJson() {
         given()
                 .spec(requestSpec)
