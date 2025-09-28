@@ -42,3 +42,4 @@ build/
 /.idea/misc.xml
 /.env
 /.idea/vcs.xml
+/src/test/java/CleanUp.java

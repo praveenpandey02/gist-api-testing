@@ -52,6 +52,7 @@ public class BasicOperationsOnAGistTests {
 
     }
 
+    //@RepeatedTest(35)
     @Test
     @Tag("smoke")
     public void createAPublicGistSuccessfully() {
@@ -59,6 +60,7 @@ public class BasicOperationsOnAGistTests {
     }
 
     @Test
+    @Tag("regression")
     public void updateGistDescription() {
         String gist_id = createAGist();
         String changedDescription = "{\"description\": \"Changed description\"}";
@@ -78,6 +80,7 @@ public class BasicOperationsOnAGistTests {
     }
 
     @Test
+    @Tag("regression")
     public void deleteGistFile() {
         String gist_id = createAGist();
         String bodyWithDeletedFile = """
@@ -102,6 +105,7 @@ public class BasicOperationsOnAGistTests {
     }
 
     @Test
+    @Tag("regression")
     public void renameGistFile() {
         String gist_id = createAGist();
         String bodyWithRenamedFile = """

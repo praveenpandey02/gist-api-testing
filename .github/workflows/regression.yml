@@ -1,11 +1,11 @@
-name: Smoke Tests
+name: Regression Tests
 
 on:
-  pull_request:
+  push:
     branches: [ "main" ]
 
 jobs:
-  run-smoke-tests:
+  run-regression-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
           java-version: '25'
           distribution: 'temurin'
 
-      - name: Run Smoke Tests 🚀
-        run: mvn clean test -Dgroups=smoke
+      - name: Run Regression Tests 🚀
+        run: mvn clean test -Dgroups='smoke,regression'
         env:
           TOKEN_FOR_GIST: ${{secrets.TOKEN_FOR_GIST}}
