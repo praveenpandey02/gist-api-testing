@@ -63,7 +63,7 @@ public class BasicOperationsOnAGistTests {
     @Tag("regression")
     public void updateGistDescription() {
         String gist_id = createAGist();
-        String changedDescription = "{\"description\": \"Changed description\"}";
+        String changedDescription = "{\"description\": \"Changed in the session\"}";
 
         given()
 //                .header("Authorization", "token " + TestSetup.auth_token)
